@@ -11,31 +11,25 @@
  */
 class BSTIterator {
 public:
-    vector<int> in;
-    int x = 0;
-    int size= 0;
-    void makein(TreeNode* r){
-        if(!r){
-            return;
-        }
-        makein(r->left);
-        in.push_back(r->val);
-        makein(r->right);
-    }
-    
+    stack<TreeNode*> st;
     BSTIterator(TreeNode* root) {
-        makein(root);
-        size = in.size();
+        pushall(root);
     }
     
     int next() {
-        return in[x++];
+        TreeNode* tmp = st.top();
+        st.pop();
+        pushall(tmp->right);
+        return tmp->val;
     }
     
     bool hasNext() {
-        if(x<size) return true;
-        return false;
+        return !st.empty();
     }
+    private:
+        void pushall(TreeNode *node) {
+            for (; node != NULL; st.push(node), node = node->left);
+        }
 };
 
 /**
